@@ -1,11 +1,11 @@
 # Deeply Pipelined NxN-bit Array Multiplier Generator (VHDL)
 
 - Using Python Generates VHDL Code for unsigned NxN bit multiplication for N > 1
-- Generates entity file and testbench file (tests all combinations of multiplications).
+- Generates entity file and testbench file (tests all combinations of multiplications)
 - **Deeply pipelined** - one pipeline stage per adder level
-- **Fully structural design** using half and full adders and no DSP usage.
-- Tested and verified design on ModelSim for 2x2, 4x4, 8x8. (Rest of the designed are too big for free addition).
-- Additional script for generating code for non-pipelined (fully combinational) NxN bit array multiplier.
+- **Fully structural design** using half and full adders and no DSP usage
+- Tested and verified design on ModelSim for 2x2, 4x4, 8x8. (Rest of the designed are too big for free addition)
+- Additional script for generating code for non-pipelined (fully combinational) NxN bit array multiplier
 
 
 ## Results
