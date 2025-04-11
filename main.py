@@ -239,7 +239,7 @@ if __name__ == "__main__":
     bits_in = args.bits
     vhd_code, tb_code = main(bits_in=args.bits, verbos=True, debug=False)
 
-    with open(f"generated_vhdl_code/array_mul_{bits_in}x{bits_in}_pl.vhd", "w") as f:
+    with open(f"generated_vhdl_code/array_mul_{bits_in}x{bits_in}_dpl.vhd", "w") as f:
         f.write(vhd_code)
-    with open(f"generated_vhdl_code/array_mul_{bits_in}x{bits_in}_pl_tb.vhd", "w") as f:
+    with open(f"generated_vhdl_code/array_mul_{bits_in}x{bits_in}_dpl_tb.vhd", "w") as f:
         f.write(tb_code)
