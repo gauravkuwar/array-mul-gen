@@ -4,7 +4,7 @@ def build_entity_code(
     ):
 
     template = \
-f"""-- Unsigned {bits_in}-bit multiplier using gate arrays - deeply pipelined {num_stages}-stage 
+f"""-- Unsigned {bits_in}-bit multiplier using gate arrays - deeply pipelined {num_stages+1}-stage 
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 
