@@ -1,6 +1,6 @@
 def build_entity_code(
         bits_in, bits_out, pl_reg_def, y_pl_reg_def, struct_code, process_code, 
-        y_reg_to_y_out_struct, num_stages, total_components
+        y_reg_to_y_out_struct, num_stages, total_components, force_logic_use
     ):
 
     template = \
@@ -36,7 +36,8 @@ architecture Structural of array_mul_{bits_in}x{bits_in}_dpl is
       COUT  : out STD_LOGIC
     );
   end component;  
-    
+  
+  attribute ramstyle : string;
   type bit_matrix_1 is array (0 to {num_stages-1}, {bits_in-1} downto 0) of STD_LOGIC;
 
   -- Registers
@@ -52,6 +53,12 @@ architecture Structural of array_mul_{bits_in}x{bits_in}_dpl is
   -- Signals
   signal S: STD_LOGIC_VECTOR({total_components-1} downto 0);
   signal C: STD_LOGIC_VECTOR({total_components-1} downto 0);
+
+  -- Force - Use logic elements, not memory blocks
+	attribute ramstyle of A1, B1 : signal is "logic";
+	attribute ramstyle of S, C : signal is "logic";
+	attribute ramstyle of valid : signal is "logic";
+{force_logic_use}
 
 begin
 {struct_code}

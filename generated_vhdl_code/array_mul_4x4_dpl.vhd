@@ -1,4 +1,4 @@
--- Unsigned 4-bit multiplier using gate arrays - deeply pipelined 13-stage 
+-- Unsigned 4-bit multiplier using gate arrays - deeply pipelined 14-stage 
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 
@@ -30,7 +30,8 @@ architecture Structural of array_mul_4x4_dpl is
       COUT  : out STD_LOGIC
     );
   end component;  
-    
+  
+  attribute ramstyle : string;
   type bit_matrix_1 is array (0 to 12, 3 downto 0) of STD_LOGIC;
 
   -- Registers
@@ -84,6 +85,50 @@ architecture Structural of array_mul_4x4_dpl is
   -- Signals
   signal S: STD_LOGIC_VECTOR(11 downto 0);
   signal C: STD_LOGIC_VECTOR(11 downto 0);
+
+  -- Force - Use logic elements, not memory blocks
+	attribute ramstyle of A1, B1 : signal is "logic";
+	attribute ramstyle of S, C : signal is "logic";
+	attribute ramstyle of valid : signal is "logic";
+	attribute ramstyle of Y1 : signal is "logic";
+	attribute ramstyle of PL_REG_0 : signal is "logic";
+	attribute ramstyle of PL_REG_1 : signal is "logic";
+	attribute ramstyle of PL_REG_2 : signal is "logic";
+	attribute ramstyle of PL_REG_3 : signal is "logic";
+	attribute ramstyle of PL_REG_4 : signal is "logic";
+	attribute ramstyle of Y2 : signal is "logic";
+	attribute ramstyle of PL_REG_5 : signal is "logic";
+	attribute ramstyle of PL_REG_6 : signal is "logic";
+	attribute ramstyle of PL_REG_7 : signal is "logic";
+	attribute ramstyle of PL_REG_8 : signal is "logic";
+	attribute ramstyle of PL_REG_9 : signal is "logic";
+	attribute ramstyle of PL_REG_10 : signal is "logic";
+	attribute ramstyle of PL_REG_11 : signal is "logic";
+	attribute ramstyle of PL_REG_12 : signal is "logic";
+	attribute ramstyle of Y3 : signal is "logic";
+	attribute ramstyle of PL_REG_13 : signal is "logic";
+	attribute ramstyle of PL_REG_14 : signal is "logic";
+	attribute ramstyle of PL_REG_15 : signal is "logic";
+	attribute ramstyle of PL_REG_16 : signal is "logic";
+	attribute ramstyle of PL_REG_17 : signal is "logic";
+	attribute ramstyle of PL_REG_18 : signal is "logic";
+	attribute ramstyle of PL_REG_19 : signal is "logic";
+	attribute ramstyle of Y4 : signal is "logic";
+	attribute ramstyle of PL_REG_20 : signal is "logic";
+	attribute ramstyle of PL_REG_21 : signal is "logic";
+	attribute ramstyle of PL_REG_22 : signal is "logic";
+	attribute ramstyle of PL_REG_23 : signal is "logic";
+	attribute ramstyle of PL_REG_24 : signal is "logic";
+	attribute ramstyle of PL_REG_25 : signal is "logic";
+	attribute ramstyle of Y5 : signal is "logic";
+	attribute ramstyle of PL_REG_26 : signal is "logic";
+	attribute ramstyle of PL_REG_27 : signal is "logic";
+	attribute ramstyle of PL_REG_28 : signal is "logic";
+	attribute ramstyle of Y6 : signal is "logic";
+	attribute ramstyle of Y7 : signal is "logic";
+	attribute ramstyle of PL_REG_29 : signal is "logic";
+	attribute ramstyle of PL_REG_30 : signal is "logic";
+	attribute ramstyle of PL_REG_31 : signal is "logic";
 
 begin
 	-- stage 1

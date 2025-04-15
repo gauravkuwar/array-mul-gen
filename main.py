@@ -111,6 +111,7 @@ def main(bits_in=4, verbos=False, debug=False):
 
     get_y_pl_depth = lambda s: tot_stages-s+1 # helper func
     y_reg_to_y_out_struct = [] # VHDL map of Y pipeline registers to Y output signal
+    force_logic_use = [] # definition for forcing logic use instead of infering bram
 
     stage = 2
 
@@ -126,15 +127,18 @@ def main(bits_in=4, verbos=False, debug=False):
         if component.is_out:
             if component.c < bits_out-3:
                 stages_process[stage].append(f"Y{component.c + 1} <= Y{component.c + 1}({get_y_pl_depth(stage)-2} downto 0) & {S(component.num)};")
-                y_pl_reg_def.append(f"signal Y{component.c + 1} : STD_LOGIC_VECTOR({get_y_pl_depth(stage)-1} downto 0);")
                 y_reg_to_y_out_struct.append(f"Y({component.c + 1}) <= Y{component.c + 1}({get_y_pl_depth(stage)-1});")
+                y_pl_reg_def.append(f"signal Y{component.c + 1} : STD_LOGIC_VECTOR({get_y_pl_depth(stage)-1} downto 0);")
+                force_logic_use.append(f'attribute ramstyle of Y{component.c + 1} : signal is "logic";')
             else:
                 stages_process[stage].append(f"Y{component.c + 1} <= {S(component.num)};")
                 stages_process[stage].append(f"Y{component.c + 2} <= {C(component.num)};")
-                y_pl_reg_def.append(f"signal Y{component.c + 1} : STD_LOGIC;")
-                y_pl_reg_def.append(f"signal Y{component.c + 2} : STD_LOGIC;")
                 y_reg_to_y_out_struct.append(f"Y({component.c + 1}) <= Y{component.c + 1};")
                 y_reg_to_y_out_struct.append(f"Y({component.c + 2}) <= Y{component.c + 2};")
+                y_pl_reg_def.append(f"signal Y{component.c + 1} : STD_LOGIC;")
+                y_pl_reg_def.append(f"signal Y{component.c + 2} : STD_LOGIC;")
+                force_logic_use.append(f'attribute ramstyle of Y{component.c + 1} : signal is "logic";')
+                force_logic_use.append(f'attribute ramstyle of Y{component.c + 2} : signal is "logic";')
 
         new_pl_regs = {
             component.in1: None,
@@ -166,6 +170,8 @@ def main(bits_in=4, verbos=False, debug=False):
                 stages_process[stage_created].append(f"{pl_reg_str} <= {pl_reg_str}({msb_place - 1} downto 0) & {input_component}; -- Stage used in = {stage_used}")
             else:
                 stages_process[stage_created].append(f"{pl_reg_str} <= {input_component}; -- Stage used in = {stage_used}")
+
+            force_logic_use.append(f'attribute ramstyle of {pl_reg_str} : signal is "logic";')
 
             if reg_size > 1:
                 pl_reg_def.append(f"signal {pl_reg_str} : STD_LOGIC_VECTOR({reg_size-1} downto 0);")
@@ -204,6 +210,7 @@ def main(bits_in=4, verbos=False, debug=False):
     add_tabs(pl_reg_def)
     add_tabs(y_pl_reg_def)
     add_tabs(y_reg_to_y_out_struct)
+    add_tabs(force_logic_use)
 
     if verbos:
         print(f"{bits_in} x {bits_in} => {bits_out}")
@@ -222,7 +229,8 @@ def main(bits_in=4, verbos=False, debug=False):
             process_code='\n'.join(process_code),
             y_reg_to_y_out_struct='\n'.join(y_reg_to_y_out_struct),
             num_stages=tot_stages,
-            total_components=total_components
+            total_components=total_components,
+            force_logic_use='\n'.join(force_logic_use)
         ), 
         build_tb_code(
             bits_in=bits_in,
